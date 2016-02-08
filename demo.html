@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+        canvas#main{
+            background-color: #fff;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <canvas id="main" width="640" height="480"></canvas>
+    </div>
+</body>
+<script type="text/javascript">
+    'use strict';
+
+    var canvas = document.querySelector('canvas#main');
+    var ctx = canvas.getContext('2d');
+
+    ctx.lineWidth = '10';
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#000';
+
+    var documentMouseMove = function(e) {
+        var x = (e.clientX + window.scrollX) - canvas.offsetTop;
+        var y = (e.clientY + window.scrollY) - canvas.offsetLeft;
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    };
+
+    var documentMouseUp = function() {
+        ctx.closePath();
+
+        document.removeEventListener('mousemove', documentMouseMove);
+        document.removeEventListener('mouseup', documentMouseUp);
+    };
+
+    var canvasMouseDown = function(e) {
+        var x = (e.clientX + window.scrollX) - canvas.offsetTop;
+        var y = (e.clientY + window.scrollY) - canvas.offsetLeft;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+
+        document.addEventListener('mousemove', documentMouseMove);
+        document.addEventListener('mouseup', documentMouseUp);
+    };
+
+    canvas.addEventListener('mousedown', canvasMouseDown);
+</script>
+</html>
